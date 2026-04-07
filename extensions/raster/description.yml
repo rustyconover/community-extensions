@@ -1,7 +1,7 @@
 extension:
   name: raster
   description: DuckDB Extension for reading and writing raster files using SQL.
-  version: 0.2.0
+  version: 0.3.0
   language: C++
   build: cmake
   excluded_platforms: "windows_amd64_mingw;wasm_mvp;wasm_eh;wasm_threads"
@@ -11,7 +11,7 @@ extension:
 
 repo:
   github: ahuarte47/duckdb-raster
-  ref: 73445fb480b443259d4b50b90771165ba3f6cd4b
+  ref: 1b36133d12b54252442e993a42a0d8cfb040f479
 
 docs:
   hello_world: |
@@ -88,9 +88,11 @@ docs:
     The `RT_Read` function provides a `datacube` option that allows to return a single `datacube` BLOB column with the N-dimensional array with the
     data of all the bands of the tile, instead of one BLOB per band.
 
+    `RT_Read` supports filter pushdown on the non-BLOB columns, which allows you to prefilter the tiles that are loaded based on their metadata or
+    spatial location. For example, you can filter the tiles that intersect with a certain geometry or that have a certain value in the metadata.
+
     This extension is still in early development, and there are many features that I want to add in the future:
 
-    - Filter pushdown on tiles is planned, LIMIT/OFFSET pushdown is already supported.
     - `COPY` function to write raster files from the loaded tables.
     - Compression formats for the data band BLOBs (`GZip`, `ZSTD`?).
     - Integration with DuckDB File System.

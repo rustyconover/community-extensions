@@ -120,6 +120,8 @@ The data band columns are a BLOB with the following internal structure:
 
 By using `RT_Read`, the extension also provides “replacement scans” for common raster file formats, allowing you to query files of these formats as if they were tables directly.
 
+`RT_Read` supports filter pushdown on the non-BLOB columns, which allows you to prefilter the tiles that are loaded based on their metadata or spatial location. For example, you can filter the tiles that intersect with a certain geometry or that have a certain value in the metadata.
+
 ----
 
 ## Scalar Functions
