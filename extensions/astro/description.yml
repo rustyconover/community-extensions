@@ -1,0 +1,27 @@
+extension:
+  name: astro
+  description: Astronomical calculations - coordinate transforms, photometry, cosmology, dust extinction, sidereal time
+  version: 1.2.0
+  language: C++
+  build: cmake
+  license: MIT
+  maintainers:
+    - bjoernbethge
+
+repo:
+  github: synapticore-io/astro-duck
+  ref: 10a6655e71b3a685bf870b993c1664e6ed2f9a2e
+
+docs:
+  hello_world: |
+    SELECT astro_angular_separation(10.68, 41.27, 83.82, -5.39) AS separation_deg;
+  extended_description: |
+    The astro extension adds 53+ astronomical calculation functions to
+    DuckDB: coordinate transforms (equatorial / galactic frames, RA/Dec
+    to XYZ), angular separation, photometry (magnitude/flux, distance
+    modulus, absolute magnitude), CCM89 + O'Donnell 1994 dust extinction
+    with UBVRIJHK bands, cosmological distances (luminosity, comoving),
+    celestial body models (stars, brown dwarfs, planets, black holes,
+    asteroids), Keplerian orbital mechanics, 3D octree spatial sectors,
+    and sidereal time / observation planning (GMST, LMST, hour angle,
+    equatorial to horizontal alt/az conversion).
