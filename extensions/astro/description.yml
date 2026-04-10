@@ -1,7 +1,7 @@
 extension:
   name: astro
   description: Astronomical calculations - coordinate transforms, photometry, cosmology, dust extinction, sidereal time
-  version: 1.2.0
+  version: 1.3.0
   language: C++
   build: cmake
   license: MIT
@@ -10,7 +10,7 @@ extension:
 
 repo:
   github: synapticore-io/astro-duck
-  ref: 10a6655e71b3a685bf870b993c1664e6ed2f9a2e
+  ref: 72d996fc93b40c42564d6c94ed6ed042b5a858f4
 
 docs:
   hello_world: |
