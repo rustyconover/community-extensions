@@ -9,7 +9,7 @@ extension:
     - teaguesterling
 repo:
   github: teaguesterling/sitting_duck
-  ref: 286322cb7a32ee023de1ad5117eb90c4c8e955c2
+  ref: fa5454689bdd869d997a54bbfa28e8fde166b3a8
 docs:
   hello_world: |
     -- Parse Python code and find function definitions
