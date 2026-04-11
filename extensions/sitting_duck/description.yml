@@ -1,7 +1,7 @@
 extension:
   name: sitting_duck
   description: Parse and analyze source code ASTs from 27 programming languages with tree-sitter grammars, pattern matching, and structural search
-  version: 1.6.0
+  version: 1.7.0
   language: C++
   build: cmake
   license: MIT
@@ -9,7 +9,7 @@ extension:
     - teaguesterling
 repo:
   github: teaguesterling/sitting_duck
-  ref: 908927e016cbe01f0786582fb00cf8e0de9c6009
+  ref: 6d3386f1e9768c8eb5b4abf6752f57a39a8721ef
 docs:
   hello_world: |
     -- Parse Python code and find function definitions
@@ -69,20 +69,35 @@ docs:
     ```
     See: https://sitting-duck.readthedocs.io/en/latest/guide/pattern-matching/
 
-    **CSS Selector Queries (v1.6.0):**
+    **CSS Selector Queries (v1.6.0, enhanced in v1.7.0):**
     Query AST nodes using CSS selector syntax — bootstrapped with sitting duck's own CSS grammar:
     ```sql
     SELECT name FROM ast_select('src/*.py', '.func:has(.call#execute):not(:has(try_statement))');
+
+    -- v1.7.0: :match (current-node) vs :contains (subtree) structural patterns
+    SELECT name FROM ast_select('src/*.py', '.func:contains("db.execute()")');
+    SELECT name FROM ast_select('src/*.py', 'call:match("db.execute()")');
     ```
-    Supports type selectors, `#name`, `.semantic` (~80 aliases), combinators, `:has()`, `:not(:has())`.
+    Supports type selectors, `#name`, `.semantic` (~80 aliases), combinators, `:has()`, `:not()`,
+    `:match()` / `:contains()` structural patterns, scope/call-graph pseudo-classes, and pseudo-element navigation.
     Bare type matching: `if` matches `if` + `if_statement` + `if_clause`.
 
     **Table Functions:**
     - `read_ast(file_pattern, language := NULL)` - Parse source files into AST rows (parallel)
-    - `parse_ast(content, language)` - Parse source code strings
+    - `parse_ast(content, language)` - Parse source code strings (table function)
+    - `parse_ast_list(content, language)` - Parse source code strings (scalar, returns LIST<STRUCT>; v1.7.0)
     - `ast_match(source, pattern, lang)` - Pattern matching for code search
     - `ast_select(source, css_selector)` - CSS selector queries
     - `ast_type_map(language)` - Node type discovery across languages
+
+    **v1.7.0 extraction suffix:**
+    Any extraction parameter (`context`, `source`, `structure`, `peek`) can take a `+schema`
+    suffix that keeps the full column set in the output schema as NULLs without computing them:
+    ```sql
+    -- Keep peek column in schema but skip its computation
+    SELECT name, peek FROM read_ast('file.py', peek := 'none+schema');
+    ```
+    Enables SQL macros to declare stable schemas regardless of which columns they populate.
 
     **Relational Predicates (v1.5.0):**
     - `ast_has(source, parent_type, child_type)` - Check containment relationships
@@ -131,7 +146,9 @@ docs:
     - `start_line`, `end_line`, `depth` - Position and nesting
     - `descendant_count` - For O(1) subtree queries
     - `peek` - Configurable source preview
-    - `qualified_name`, `signature_type`, `parameters`, `modifiers`, `annotations` - Native extraction
+    - `qualified_name` - Scope-based path unique within a file (`C[User] F[__init__]` format; v1.7.0)
+    - `signature_type`, `parameters`, `modifiers`, `annotations` - Native extraction
+    - `scope_id`, `scope_stack` - Scope resolution columns
 
     Full schema: https://sitting-duck.readthedocs.io/en/latest/api/output-schema/
 
