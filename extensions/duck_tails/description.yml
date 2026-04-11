@@ -1,7 +1,7 @@
 extension:
   name: duck_tails
   description: Smart Development Intelligence for DuckDB - Git-aware data analysis capabilities that allow querying git history, accessing files at any revision, and performing version-aware data analysis with SQL.
-  version: 1.3.1
+  version: 1.4.0
   language: C++
   build: cmake
   license: MIT
@@ -11,7 +11,7 @@ extension:
     - teaguesterling
 repo:
   github: teaguesterling/duck_tails
-  ref: 8bff511c120afb01137b6e79baa9964c572b20b7
+  ref: 9f3ebcaf989ed132b9d3ee6ab9369735773752d5
 
 docs:
   hello_world: |
