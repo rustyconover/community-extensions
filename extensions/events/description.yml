@@ -11,4 +11,4 @@ extension:
   version: '2026041501'
 repo:
   github: query-farm/events
-  ref: d48062cb3bec9944dd04ed99f7fbe057cc07864a
+  ref: d6e9afda80991072386f64825c5c11339f051e99
