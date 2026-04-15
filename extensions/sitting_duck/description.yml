@@ -1,7 +1,7 @@
 extension:
   name: sitting_duck
   description: Parse and analyze source code ASTs from 27 programming languages with tree-sitter grammars, pattern matching, and structural search
-  version: 1.7.2
+  version: 1.7.4
   language: C++
   build: cmake
   license: MIT
@@ -9,7 +9,7 @@ extension:
     - teaguesterling
 repo:
   github: teaguesterling/sitting_duck
-  ref: afc126d57a0895ac51ac472b2da2a7fd552875bd
+  ref: 1eb30cf990c73640cf0cd745435b676f27d159b7
 docs:
   hello_world: |
     -- Parse Python code and find function definitions
@@ -154,7 +154,9 @@ docs:
     - `peek` - Configurable source preview
     - `qualified_name` - Scope-based path unique within a file (`C[User] F[__init__]` format; v1.7.0)
     - `signature_type`, `parameters`, `modifiers`, `annotations` - Native extraction
-    - `scope_id`, `scope_stack` - Scope resolution columns
+    - `scope` - STRUCT<current, function, class, module, stack> (v1.7.4); replaces
+      the v1.7.2 `scope_id` / `scope_stack` columns. `scope.function` lets you
+      answer "what function is this in?" as a single column read.
 
     Full schema: https://sitting-duck.readthedocs.io/en/latest/api/output-schema/
 
