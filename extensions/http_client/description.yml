@@ -52,4 +52,4 @@ extension:
 repo:
   andium: e9730fc28af6757f663246f06956a8cab7ad9a55
   github: query-farm/httpclient
-  ref: a7fb102608db48cb17b123512f5f079607d667f2
+  ref: ae403862ff7fa4ed119f1baa855e579104eefe7b
