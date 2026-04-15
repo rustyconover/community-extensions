@@ -9,12 +9,12 @@ extension:
   maintainers:
     - wasade
   requires:
-    duckdb: "1.5.1"
+    duckdb: "1.5.2"
   requires_toolchains: rust
 
 repo:
   github: the-miint/duckdb-miint
-  ref: f247559c6db67501448605360e36d0372c6f069e
+  ref: 7a081072aa61f5d9db63ffc209b8dea66d9c2401
 
 docs:
   hello_world: |
