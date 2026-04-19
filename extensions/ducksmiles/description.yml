@@ -1,7 +1,7 @@
 extension:
-  name: smiles
-  description: Parse SMILES chemical notation from SQL — molecular formula, atom/bond counts, validation
-  version: 0.0.1
+  name: ducksmiles
+  description: Cheminformatics toolkit for DuckDB - SMILES, InChI, MOL/SDF, PDB, and SELFIES molecular analysis from SQL
+  version: 0.1.0
   language: C++
   build: cmake
   license: MIT
@@ -10,7 +10,7 @@ extension:
 
 repo:
   github: nkwork9999/duckSMILES
-  ref: c087abde5e654bcb821e40880ff67f7e88f218bd
+  ref: 34b7b1ea6bf61cb66c373323b015ee5f17dd897f
 
 docs:
   hello_world: |
@@ -22,36 +22,34 @@ docs:
     SELECT mol_formula('CCO');           -- C2H6O  (ethanol)
     SELECT mol_formula('c1ccccc1');      -- C6H6   (benzene)
     SELECT mol_formula('O');             -- H2O    (water)
-    SELECT mol_formula('CC(=O)O');       -- C2H4O2 (acetic acid)
 
-    -- Atom and bond counts
-    SELECT mol_num_atoms('CCO');         -- 3 (heavy atoms)
-    SELECT mol_num_bonds('c1ccccc1');    -- 6
+    -- Molecular weight
+    SELECT round(mol_weight('c1ccccc1'), 2);  -- 78.11
+
+    -- InChI layer extraction
+    SELECT inchi_formula('InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)');  -- C2H4O2
+
+    -- Convert SMILES to SELFIES (ML-friendly notation)
+    SELECT smiles_to_selfies('CCO');
 
     -- Batch processing
     SELECT smiles, mol_formula(smiles) AS formula, mol_num_atoms(smiles) AS atoms
     FROM (VALUES ('CCO'), ('c1ccccc1'), ('CC(=O)Oc1ccccc1C(=O)O')) AS t(smiles);
 
   extended_description: |
-    DuckDB extension for parsing SMILES (Simplified Molecular Input Line Entry System)
-    chemical notation directly from SQL.
+    Cheminformatics toolkit for DuckDB — analyze molecular structures directly from SQL
+    without leaving your database. Pure Rust implementation with no external chemistry
+    library dependencies (no RDKit required).
 
-    Self-contained lightweight SMILES parser — no RDKit or external chemistry libraries required.
-    Zero external dependencies.
+    **Supported Formats:**
+    - SMILES: Molecular validation, formula, weight, atom/bond counts
+    - InChI/InChIKey: Layer extraction, stereochemistry detection, skeleton matching
+    - MOL/SDF: V2000/V3000 block parsing, molecule counting
+    - PDB/CIF/XYZ: Protein structure analysis (atom, chain, residue, model counts)
+    - SELFIES: Bidirectional SMILES-SELFIES conversion for ML pipelines
 
-    **Functions:**
+    **28 scalar SQL functions** for molecular property extraction, format conversion,
+    and structural comparison. Ideal for cheminformatics datasets, drug discovery
+    pipelines, and molecular ML feature engineering.
 
-    | Function | Description |
-    |----------|-------------|
-    | `mol_is_valid(smiles)` | Check if SMILES string is valid (returns BOOLEAN) |
-    | `mol_formula(smiles)` | Molecular formula in Hill system, e.g. `C2H6O` (returns VARCHAR) |
-    | `mol_num_atoms(smiles)` | Heavy atom count, excluding hydrogen (returns INTEGER) |
-    | `mol_num_bonds(smiles)` | Bond count (returns INTEGER) |
-
-    **Supported SMILES features:**
-    - Organic subset atoms: B, C, N, O, P, S, F, Cl, Br, I
-    - Aromatic atoms: c, n, o, s, p, b
-    - Bracket atoms: [NH3+], [Fe+2], [13C@@H]
-    - Branches, ring closures, disconnected fragments
-    - Implicit hydrogen (automatic, valence-based)
-    - Invalid SMILES returns false/NULL — never crashes
+    **Architecture:** Rust (core logic) + C++ (DuckDB integration via FFI)

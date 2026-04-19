@@ -1,0 +1,43 @@
+extension:
+  name: talib
+  description: "Technical Analysis Library (TA-Lib) functions for DuckDB -- 100+ indicators for financial market analysis"
+  version: 0.1.1
+  language: C++
+  build: cmake
+  license: MIT
+  maintainers:
+    - neuesql
+  excluded_platforms: "wasm_mvp;wasm_eh;wasm_threads;windows_amd64_rtools;windows_amd64_mingw"
+
+repo:
+  github: neuesql/atm_talib
+  ref: e3f6fb79dda4e930e0fa25ce68a6a0a2383645da
+
+docs:
+  hello_world: |
+    -- Scalar form: operate on a pre-collected list
+    SELECT t_sma([1.0, 2.0, 3.0, 4.0, 5.0], 3);
+
+    -- Aggregate/window form: use OVER() for row-by-row SMA
+    SELECT date, close,
+           ta_sma(close, 14) OVER (ORDER BY date
+                                   ROWS BETWEEN 13 PRECEDING AND CURRENT ROW) AS sma_14
+    FROM ohlc;
+
+    -- Multi-output indicators return structs (MACD, Bollinger Bands)
+    SELECT t_macd(list(close ORDER BY date), 12, 26, 9) FROM ohlc;
+    SELECT t_bbands(list(close ORDER BY date), 20, 2.0, 2.0, 0) FROM ohlc;
+
+    -- Candlestick pattern recognition
+    SELECT t_cdldoji(list(open  ORDER BY date), list(high  ORDER BY date),
+                     list(low   ORDER BY date), list(close ORDER BY date))
+    FROM ohlc;
+  extended_description: |
+    100+ TA-Lib indicators as native DuckDB functions: overlap studies
+    (SMA, EMA, BBANDS), momentum (RSI, MACD, Stochastic), volatility
+    (ATR, NATR), volume and cycle indicators, math/statistics, and
+    candlestick pattern recognizers.
+
+    Every function is registered in two forms:
+    - Scalar (`t_*`): pass pre-collected lists, returns a list
+    - Aggregate/window (`ta_*`): use with `OVER()` for row-by-row results
